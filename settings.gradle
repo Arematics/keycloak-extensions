@@ -1,0 +1,3 @@
+rootProject.name = 'keycloak-extensions'
+include 'two-factor-endpoint'
+

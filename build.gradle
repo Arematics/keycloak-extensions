@@ -1,0 +1,40 @@
+group 'com.arematics.keycloak'
+version '1.0-SNAPSHOT'
+
+subprojects {
+    apply plugin: 'java'
+
+    group = 'com.arematics.keycloak'
+    sourceCompatibility = '11'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        //Lombok
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+        //Keycloak
+        compileOnly group: 'org.keycloak', name: 'keycloak-server-spi', version: '19.0.3'
+        compileOnly group: 'org.keycloak', name: 'keycloak-server-spi-private', version: '19.0.3'
+        compileOnly group: 'org.keycloak', name: 'keycloak-services', version: '19.0.3'
+    }
+
+    jar {
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
