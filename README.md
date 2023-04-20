@@ -6,7 +6,7 @@ Project that provides an admin endpoint for having the Two Factor Authentication
 
 You still need to create an Proxy Endpoint in your Keycloak Client Application that then access the admin api. Using the Admin API directly in your frontend is **NOT** recommended.
 
-To use the Endpoints in your Keycloak Client Application some extra cood is needed. 
+To use the Endpoints in your Keycloak Client Application some extra code is needed. 
 Follow these steps to use the endpoints.
 
 Libraries used for this example:
