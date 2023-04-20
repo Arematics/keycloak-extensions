@@ -30,4 +30,5 @@ jobs:
         gh release upload ${{ env.VERSION }} two-factor-endpoint-${{ env.VERSION }}.jar
       env:
         VERSION: ${{ github.ref_name }}
+        GH_TOKEN: ${{ github.token }}
         
