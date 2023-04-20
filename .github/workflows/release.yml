@@ -24,3 +24,10 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+    - name: Upload to GitHub Release
+      run: |
+        cp two-factor-endpoint/build/libs/two-factor-endpoint-latest.jar two-factor-endpoint-${{ env.VERSION }}.jar
+        gh release upload ${{ env.VERSION }} two-factor-endpoint-${{ env.VERSION }}.jar
+      env:
+        VERSION: ${{ github.ref_name }}
+        
