@@ -8,13 +8,13 @@ Project that provides an admin endpoint for having the Two Factor Authentication
 having no need to setup Two Factor Authentication inside the Keycloak UI.
 
 ### Deployment on Keycloak
-To use the Two-Factor-Endpoint first of all you need to create the jar for the project
+To use the Two-Factor-Endpoint first of all you need to get a jar from the Releases Section. Also you can create the jar for the project by urself. For that clone the project and execute
 
 ```bash
-./gradlew jar
+./gradlew build
 ```
 
-After that the jar from `two-factor-endpoint/build/libs/` must be placed inside the Keycloak Application under `otp/keycloak/providers`
+After that the used jar, if u created the jar by your own from `two-factor-endpoint/build/libs/`, must be placed inside the Keycloak Application under `otp/keycloak/providers`
 
 Restart your Keycloak Application and have a look in https://your.keycloak.adress/auth/admin/master/console/#/master/providers if you can find `arematics-tfa` under the realm-restapi-extension section. If so, the endpoints are ready to use.
 
