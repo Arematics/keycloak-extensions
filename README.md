@@ -99,4 +99,4 @@ The flow is first using the fetchOtp for fetching a OTP Setup Init with the QR C
     }
 ```
 
-And thats it, now you jsut need to implement your Rest Endpoints in your Keycloak Client Application and use them.
+And thats it, now you just need to implement your Rest Endpoints in your Keycloak Client Application and use them.
