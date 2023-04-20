@@ -1,12 +1,16 @@
 # Arematics Keycloak Extensions
+
 Keycloak Identity Provider Extensions used for Arematics Auth System with Keycloak
 
 ## Two-Factor-Endpoint
-Project that provides an admin endpoint for having the Two Factor Authentication Setup inside a own application and having no need to setup Two Factor Authentication inside the Keycloak UI.
 
-You still need to create an Proxy Endpoint in your Keycloak Client Application that then access the admin api. Using the Admin API directly in your frontend is **NOT** recommended.
+Project that provides an admin endpoint for having the Two Factor Authentication Setup inside a own application and
+having no need to setup Two Factor Authentication inside the Keycloak UI.
 
-To use the Endpoints in your Keycloak Client Application some extra code is needed. 
+You still need to create an Proxy Endpoint in your Keycloak Client Application that then access the admin api. Using the
+Admin API directly in your frontend is **NOT** recommended.
+
+To use the Endpoints in your Keycloak Client Application some extra code is needed.
 Follow these steps to use the endpoints.
 
 Libraries used for this example:
@@ -19,9 +23,12 @@ dependencies {
     implementation group: 'org.jboss.resteasy', name: 'resteasy-client', version: '5.0.2.Final'
 }
 ```
+
 ### Create the OtpResource Endpoint Adapters:
 
 ```java
+package your.keycloak.client.resources;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,9 +45,12 @@ public interface OtpResource {
     Response enable2Fa(final @PathParam("uuid") String uuid, final OtpDetailsRepresentation optDetails);
 }
 ```
+
 ### Create the OtpRepresentation and OtpDetailsRepresentation Classes
 
 ```java
+package your.keycloak.client.resources;
+
 import lombok.*;
 
 @NoArgsConstructor
@@ -54,7 +64,10 @@ public class OtpRepresentation {
     private String totpSecretEncoded;
 }
 ```
+
 ```java
+package your.keycloak.client.resources;
+
 import lombok.*;
 
 @NoArgsConstructor
@@ -78,15 +91,49 @@ public class OtpDetailsRepresentation {
 ```
 
 ### Use it
-The flow is first using the fetchOtp for fetching a OTP Setup Init with the QR Code Picture and then use the user input as the OtpDetailsRepresentation to save the new otp setup.
+
+The flow is first using the fetchOtp for fetching a OTP Setup Init with the QR Code Picture and then use the user input
+as the OtpDetailsRepresentation to save the new otp setup.
 
 ```java
+package your.keycloak.client.service;
+
+import org.keycloak.admin.client.Keycloak;
+import your.keycloak.client.resources.OtpDetailsRepresentation;
+import your.keycloak.client.resources.OtpRepresentation;
+import your.keycloak.client.resources.OtpResource;
+
+import lombok.RequiredArgsConstructor;
+
+import javax.ws.rs.core.Response;
+import java.net.URI;
+
+@RequiredArgsConstructor
+public class YourAdminAccessService {
+    //Your Keycloak Class from Keycloak Admin Client
+    private final Keycloak keycloak;
+    //Your Keycloak Auth Server Root Url
+    private final String url;
+    //Keycloak Realm you are using for this service
+    private final String realm;
+
+
+    /**
+     * Initial OTP Setup fetching QR Code and Totp Secret from Two-Factor-Endpoint Library
+     * @param uuid User ID for the OTP Setup
+     * @return Data like QR Code and Totp Secret
+     */
     public OtpRepresentation fetchOtp(String uuid){
         URI uri = URI.create(url + "/realms/" + realm + "/arematics-tfa/");
         OtpResource resource = keycloak.proxy(OtpResource.class, uri);
         return resource.fetchOtpEnableConfig(uuid);
     }
 
+    /**
+     * Add the OTP to the Keycloak User with the given data
+     * @param uuid User ID for the OTP Setup
+     * @param details Data containing wanted OTP Name, Secret from OTP App and Totp Secret
+     */
     public void saveOtp(String uuid, OtpDetailsRepresentation details){
         URI uri = URI.create(url + "/realms/" + realm + "/arematics-tfa/");
         OtpResource resource = keycloak.proxy(OtpResource.class, uri);
@@ -97,6 +144,7 @@ The flow is first using the fetchOtp for fetching a OTP Setup Init with the QR C
             throw new RuntimeException(e);
         }
     }
+}
 ```
 
 And thats it, now you just need to implement your Rest Endpoints in your Keycloak Client Application and use them.

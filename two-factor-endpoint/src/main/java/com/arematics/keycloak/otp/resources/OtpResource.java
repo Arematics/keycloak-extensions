@@ -8,13 +8,13 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.HttpResponse;
 import org.keycloak.common.ClientConnection;
-import org.keycloak.credential.CredentialModel;
-import org.keycloak.credential.CredentialProvider;
 import org.keycloak.forms.account.freemarker.model.TotpBean;
-import org.keycloak.models.*;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.OTPPolicy;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 import org.keycloak.models.credential.OTPCredentialModel;
 import org.keycloak.models.utils.CredentialValidation;
-import org.keycloak.models.utils.TimeBasedOTP;
 import org.keycloak.services.resources.admin.RealmsAdminResource;
 import org.keycloak.utils.CredentialHelper;
 
@@ -23,9 +23,6 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class OtpResource extends AbstractAdminResource {
     protected static final Logger logger = Logger.getLogger(RealmsAdminResource.class);
